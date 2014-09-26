@@ -18,8 +18,8 @@ directory "chef-cache" do
   action  :create
 end
 
-pathPrefix = node[:artifactPathPrefix]
-node[:artifacts].each do |artifactName, artifact|
+pathPrefix = node['artifactPathPrefix']
+node['artifacts'].each do |artifactName, artifact|
   url             = artifact[:url]
   path            = artifact[:path] ? "#{pathPrefix}/#{artifact[:path]}" : nil
   artifact_id     = artifact[:artifactId]
