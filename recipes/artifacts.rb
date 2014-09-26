@@ -31,7 +31,7 @@ node['artifacts'].each do |artifactName, artifact|
   classifier      = artifact[:classifier] ? artifact[:classifier] : ""
   subfolder       = artifact[:subfolder] ? artifact[:subfolder] : ""
   destination     = artifact[:destination]
-  destinationName = artifact[:destinationName] ? artifact[:destinationName] : "#{artifactName}"
+  destinationName = artifact[:destinationName] ? artifact[:destinationName] : artifactName
   enabled         = artifact[:enabled] ? artifact[:enabled] : false
   properties      = artifact[:properties] ? artifact[:properties] : []
   terms           = artifact[:terms] ? artifact[:terms] : []
@@ -52,7 +52,7 @@ node['artifacts'].each do |artifactName, artifact|
         source        url
       end
     elsif artifact_id and group_id and version
-      maven "#{artifactName}" do
+      maven artifactName do
         artifact_id   artifact_id
         group_id      group_id
         version       version
@@ -111,7 +111,7 @@ node['artifacts'].each do |artifactName, artifact|
       termMap.each do |termMatch, termReplacement|
         file_replace  "#{destination}/#{artifactName}/#{fileToPatch}" do
           replace     "#{term_delimiter_start}#{termMatch}#{term_delimiter_end}"
-          with        "#{termReplacement}"
+          with        termReplacement
           only_if     "test -f #{destination}/#{artifactName}/#{fileToPatch}"
         end
       end
