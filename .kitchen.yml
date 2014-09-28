@@ -39,7 +39,7 @@ suites:
           artifactId : "junit",
           version : "4.11",
           destination: "/home/vagrant/subfolder_suite",
-          subfolder: "org/\\*",
+          subfolder: "META-INF/\\*",
           owner: "root"
         }
       }
