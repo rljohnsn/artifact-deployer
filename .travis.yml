@@ -7,13 +7,14 @@
 
 script:
 - gem install foodcritic
-- gem install test-kitchen
-- gem install kitchen-vagrant
 - foodcritic -f any .
-- bundle exec kitchen test
 
-after_script:
-- bundle exec kitchen destroy
+# - gem install test-kitchen
+# - gem install kitchen-vagrant
+# - bundle exec kitchen test
+
+# after_script:
+# - bundle exec kitchen destroy
 
 rvm:
   - 1.9.3

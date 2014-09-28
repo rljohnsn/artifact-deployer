@@ -17,40 +17,22 @@ suites:
       - recipe[artifact-deployer::default]
     attributes: {
       artifacts: {
-        junit: {
+        junit1: {
           enabled: true,
           groupId : "junit",
           artifactId : "junit",
           version : "4.11",
           destination: "/home/vagrant/default_suite",
           owner: "root"
-        }
-      }
-    }
-  - name: disabled
-    data_bags_path: "test/integration/data_bags"
-    run_list:
-      - recipe[apt::default]
-      - recipe[artifact-deployer::default]
-    attributes: {
-      artifacts: {
-        junit: {
+        },
+        junit2: {
           groupId : "junit",
           artifactId : "junit",
           version : "4.11",
           destination: "/home/vagrant/disabled_suite",
           owner: "root"
-        }
-      }
-    }
-  - name: subfolder
-    data_bags_path: "test/integration/data_bags"
-    run_list:
-      - recipe[apt::default]
-      - recipe[artifact-deployer::default]
-    attributes: {
-      artifacts: {
-        junit: {
+        },
+        junit3: {
           enabled: true,
           unzip: true,
           groupId : "junit",
