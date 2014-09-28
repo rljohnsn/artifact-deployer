@@ -1,0 +1,63 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+#  - name: ubuntu-12.04
+  - name: centos-6.4
+
+suites:
+  - name: default
+    data_bags_path: "test/integration/data_bags"
+    run_list:
+      - recipe[apt::default]
+      - recipe[artifact-deployer::default]
+    attributes: {
+      artifacts: {
+        junit: {
+          enabled: true,
+          groupId : "junit",
+          artifactId : "junit",
+          version : "4.11",
+          destination: "/home/vagrant",
+          owner: "root"
+        }
+      }
+    }
+  - name: disabled
+    data_bags_path: "test/integration/data_bags"
+    run_list:
+      - recipe[apt::default]
+      - recipe[artifact-deployer::default]
+    attributes: {
+      artifacts: {
+        junit: {
+          groupId : "junit",
+          artifactId : "junit",
+          version : "4.11",
+          destination: "/home/vagrant",
+          owner: "root"
+        }
+      }
+    }
+  - name: subfolder
+    data_bags_path: "test/integration/data_bags"
+    run_list:
+      - recipe[apt::default]
+      - recipe[artifact-deployer::default]
+    attributes: {
+      artifacts: {
+        junit: {
+          enabled: true,
+          groupId : "junit",
+          artifactId : "junit",
+          version : "4.11",
+          destination: "/home/vagrant",
+          subfolder: "org/\\*",
+          owner: "root"
+        }
+      }
+    }

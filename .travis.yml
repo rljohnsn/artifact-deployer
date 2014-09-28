@@ -5,6 +5,6 @@
 #   - 1.9.3
 # script: BUNDLE_GEMFILE=test/support/Gemfile bundle exec rake foodcritic
 
-script: "gem install foodcritic -v 4.0.0 && foodcritic -f any ."
+script: "gem install foodcritic -v 4.0.0 && foodcritic -f any . && kitchen test"
 rvm:
   - 1.9.3
