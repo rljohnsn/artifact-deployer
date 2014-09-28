@@ -6,12 +6,14 @@
 # script: BUNDLE_GEMFILE=test/support/Gemfile bundle exec rake foodcritic
 
 script:
-- gem install foodcritic -v 4.0.0
+- gem install foodcritic
+- gem install test-kitchen
+- gem install kitchen-vagrant
 - foodcritic -f any .
 - bundle exec kitchen test
 
 after_script:
-- bundle exec kitchen destroy $KITCHEN_INSTANCE
+- bundle exec kitchen destroy
 
 rvm:
   - 1.9.3
