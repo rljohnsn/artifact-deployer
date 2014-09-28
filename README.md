@@ -147,3 +147,7 @@ The following configuration contains:
     "aws_secret_access_key" : "XXXXXXXXXXXXXXXXXXXX/XXXXXXXXXXXXXXXXXXXX"
 }
 ```
+
+Travis CI
+---
+Artifact Deployer is [hosted on Travis CI](https://travis-ci.org/maoo/artifact-deployer), running foodcritic.
