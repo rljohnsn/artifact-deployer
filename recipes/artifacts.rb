@@ -9,13 +9,13 @@ maven_repos_str = []
   maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
 end
 
-chef_cache   = "/var/chef/cache"
-directory "chef-cache" do
-  path    chef_cache
-  owner   "root"
-  group   "root"
-  mode    00755
-  action  :create
+chef_cache   = Chef::Config[:file_cache_path]
+directory   "chef-cache" do
+  path      chef_cache
+  owner     "root"
+  group     "root"
+  mode      00755
+  action    :create
 end
 
 pathPrefix = node['artifactPathPrefix']
