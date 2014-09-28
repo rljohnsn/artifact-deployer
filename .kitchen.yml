@@ -7,7 +7,7 @@ provisioner:
 
 platforms:
   - name: ubuntu-12.04
-  - name: centos-6.4
+#  - name: centos-6.4
 
 suites:
   - name: default
@@ -22,7 +22,7 @@ suites:
           groupId : "junit",
           artifactId : "junit",
           version : "4.11",
-          destination: "/home/vagrant",
+          destination: "/home/vagrant/default_suite",
           owner: "root"
         }
       }
@@ -38,7 +38,7 @@ suites:
           groupId : "junit",
           artifactId : "junit",
           version : "4.11",
-          destination: "/home/vagrant",
+          destination: "/home/vagrant/disabled_suite",
           owner: "root"
         }
       }
@@ -52,10 +52,11 @@ suites:
       artifacts: {
         junit: {
           enabled: true,
+          unzip: true,
           groupId : "junit",
           artifactId : "junit",
           version : "4.11",
-          destination: "/home/vagrant",
+          destination: "/home/vagrant/subfolder_suite",
           subfolder: "org/\\*",
           owner: "root"
         }

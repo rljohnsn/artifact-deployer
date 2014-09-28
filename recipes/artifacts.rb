@@ -71,6 +71,7 @@ node['artifacts'].each do |artifactName, artifact|
       path          destination
       owner         owner
       action        :create
+      recursive     true
     end
 
     if unzip == true
