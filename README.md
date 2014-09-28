@@ -1,6 +1,8 @@
 Artifact Deployer
 ---
 
+[![Build Status](https://travis-ci.org/maoo/artifact-deployer.svg)](https://travis-ci.org/maoo/artifact-deployer)
+
 A Chef Cookbook that provides a simple way to download, unpack and configure artifacts.
 Download is offered via
 - Maven GAV coordinates
