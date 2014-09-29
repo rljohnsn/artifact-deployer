@@ -24,7 +24,7 @@ describe 'artifact-deployer::default' do
     expect(chef_run).to delete_file '/usr/local/maven/conf/settings.xml'
   end
 
-  it 'create mvn settings' do
+  it 'fix parent folder permissions' do
     expect(chef_run).to create_directory 'fix-permissions-/opt/test'
   end
 end
