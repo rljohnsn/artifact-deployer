@@ -153,6 +153,11 @@ The following configuration contains:
 Testing
 ---
 ```
-gem install rspec chefspec berkshelf
+gem install rspec chefspec chef-librarian test-kitchen
+
+# Unit testing
 rspec
+
+# Integration testing
+kitchen
 ```

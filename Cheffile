@@ -1,0 +1,10 @@
+site "https://supermarket.getchef.com/api/v1"
+
+cookbook 'apt', '2.6.0'
+cookbook 'ark', '0.8.0'
+cookbook 'resolver', '1.1.4'
+cookbook 'java', '1.25.0'
+cookbook 'maven', '1.1.0'
+
+cookbook 'file',                    :git => 'git://github.com/jenssegers/chef-filehelper.git'
+cookbook 'artifact-deployer',       :path => '.'

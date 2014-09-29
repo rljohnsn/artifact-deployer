@@ -7,4 +7,4 @@ cookbook 'java',                    tag: 'v1.25.0'
 cookbook 'maven',                   tag: 'v1.1.0'
 
 cookbook 'file',                    git: 'git://github.com/jenssegers/chef-filehelper.git'
-cookbook 'artifact-deployer',       git: 'git://github.com/maoo/artifact-deployer.git'
+cookbook 'artifact-deployer',       path: '.'

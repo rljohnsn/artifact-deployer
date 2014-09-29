@@ -12,7 +12,30 @@ describe 'artifact-deployer::default' do
     end.converge(described_recipe)
   end
 
-  it 'create junit.jar file' do
-    expect(chef_run).to create_file '/home/vagrant/default_suite/junit.jar'
+  before do
+    stub_data_bag('maven_repos').and_return(['alfresco'])
+    stub_data_bag_item('alfresco', 'id').and_return("public")
+    stub_data_bag_item('alfresco', 'url').and_return("https://artifacts.alfresco.com/nexus/content/groups/public")
+    stub_data_bag_item('alfresco', 'username').and_return("")
+    stub_data_bag_item('alfresco', 'password').and_return("")
+
+    stub_command(start_with("test -f")).and_return(true)
   end
+
+  # it 'fetch junit.jar mvn artifact' do
+  #   expect(chef_run).to put_maven 'junit'
+  # end
+
+  it 'create junit.jar file' do
+    expect(chef_run).to run_execute 'copying-package-junit.jar'
+  end
+
+  it 'create mvn settings' do
+    expect(chef_run).to delete_file '/usr/local/maven/conf/settings.xml'
+  end
+
+  it 'create mvn settings' do
+    expect(chef_run).to create_directory 'fix-permissions-/home/vagrant/default_suite'
+  end
+
 end

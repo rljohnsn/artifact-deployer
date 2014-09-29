@@ -76,9 +76,12 @@ class Chef
                     end
                   end
                 end
-
-        repos.each { |repo| validate_repo_item(repo) }
-        repos
+        if repos
+          repos.each { |repo| validate_repo_item(repo) }
+          repos
+        else
+          []
+        end
       end
 
       def validate_repo_item(repo)
