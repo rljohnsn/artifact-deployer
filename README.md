@@ -150,6 +150,9 @@ The following configuration contains:
 }
 ```
 
-Travis CI
+Testing
 ---
-Artifact Deployer is [hosted on Travis CI](https://travis-ci.org/maoo/artifact-deployer), running foodcritic.
+```
+gem install rspec chefspec berkshelf
+rspec
+```

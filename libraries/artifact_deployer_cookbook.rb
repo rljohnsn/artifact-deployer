@@ -59,10 +59,12 @@ class Chef
 
       def find_repos
         repos = if Chef::Config[:solo]
-                  data_bag = Chef::DataBag.load(REPOS_DATA_BAG)
-                  data_bag.keys.map do |name|
-            Chef::DataBagItem.load(REPOS_DATA_BAG, name)
-          end
+                  if Chef::DataBag.list.key?(REPOS_DATA_BAG)
+                    data_bag = Chef::DataBag.load(REPOS_DATA_BAG)
+                    data_bag.keys.map do |name|
+                      Chef::DataBagItem.load(REPOS_DATA_BAG, name)
+                    end
+                  end
                 else
                   begin
                     items = Chef::Search::Query.new.search(REPOS_DATA_BAG)[0]
