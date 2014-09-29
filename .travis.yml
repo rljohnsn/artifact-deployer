@@ -9,7 +9,7 @@ script:
 - gem install foodcritic
 - gem install rspec
 - gem install chefspec
-- gem install berkshelf
+- gem install librarian-chef
 - foodcritic -f any .
 - rspec
 
