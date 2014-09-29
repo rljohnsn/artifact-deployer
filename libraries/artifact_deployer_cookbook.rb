@@ -68,14 +68,13 @@ class Chef
                 else
                   begin
                     data_bag = Chef::Search::Query.new.search(REPOS_DATA_BAG)
-                    if data_bag
-                      items = data_bag[0]
-                    end
+                    items = data_bag[0]
+                    decrypt_items(items)
                   rescue Net::HTTPServerException => e
-                    raise MavenRepoDataBagNotFound if e.message.match(/404/)
-                    raise e
+                    unless e.message.match(/404/)
+                      raise e
+                    end
                   end
-                  decrypt_items(items)
                 end
 
         repos.each { |repo| validate_repo_item(repo) }
