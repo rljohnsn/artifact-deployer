@@ -67,7 +67,10 @@ class Chef
                   end
                 else
                   begin
-                    items = Chef::Search::Query.new.search(REPOS_DATA_BAG)[0]
+                    data_bag = Chef::Search::Query.new.search(REPOS_DATA_BAG)
+                    if data_bag
+                      items = data_bag[0]
+                    end
                   rescue Net::HTTPServerException => e
                     raise MavenRepoDataBagNotFound if e.message.match(/404/)
                     raise e
