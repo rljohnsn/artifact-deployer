@@ -13,6 +13,9 @@ script:
 - foodcritic -f any .
 - rspec
 
+gemfile:
+- Gemfile
+
 # - gem install test-kitchen
 # - gem install kitchen-vagrant
 # - bundle exec kitchen test
