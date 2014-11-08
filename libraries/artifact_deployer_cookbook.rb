@@ -91,8 +91,10 @@ class Chef
       end
 
       def decrypt_items(items)
-        items.map do |item|
-          EncryptedDataBagItem.new(item, encrypted_secret)
+        unless File.exists('/etc/chef/encrypted_data_bag_secret')
+          items.map do |item|
+            EncryptedDataBagItem.new(item, encrypted_secret)
+          end
         end
       end
 
