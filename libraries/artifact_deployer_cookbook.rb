@@ -91,10 +91,12 @@ class Chef
       end
 
       def decrypt_items(items)
-        unless File.file?('/etc/chef/encrypted_data_bag_secret')
+        begin
           items.map do |item|
             EncryptedDataBagItem.new(item, encrypted_secret)
           end
+        rescue Exception => e
+          items
         end
       end
 
