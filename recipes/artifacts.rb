@@ -64,6 +64,7 @@ node['artifacts'].each do |artifactName, artifact|
         owner         owner
         packaging     artifactType
         repositories  maven_repos_str
+        notifies      :create, "directory[fix-permissions-#{destination}]"
       end
     end
 
@@ -79,12 +80,14 @@ node['artifacts'].each do |artifactName, artifact|
         command     "unzip -q -u -o  #{chef_cache}/#{fileNameWithExt} #{subfolder} -d #{destinationPath}; chown -R #{owner} #{destinationPath}; chmod -R 755 #{destinationPath}"
         user        owner
         only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
+        subscribes  :run, "directory[fix-permissions-#{destination}]"
       end
     else
       execute "copying-package-#{fileNameWithExt}" do
         command     "cp -Rf #{chef_cache}/#{fileNameWithExt} #{destination}/#{fileNameWithExt}; chown -R #{owner} #{destination}/#{fileNameWithExt}"
         user        owner
         only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
+        subscribes  :run, "directory[fix-permissions-#{destination}]"
       end
     end
 
