@@ -9,6 +9,9 @@ template  "#{m2_home}/conf/settings.xml" do
   mode    0666
   owner   "root"
   group   "root"
+  variables(
+    :repos => data_bag('maven_repos')
+  )
 end
 
 if !master_password.empty?

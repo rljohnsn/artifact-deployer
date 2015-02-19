@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'artifact-deployer::default' do
   let(:chef_run) do
-    ChefSpec::Runner.new do |node|
+    ChefSpec::SoloRunner.new do |node|
       node.set['artifacts']['alfresco']['enabled'] = true
       node.set['artifacts']['alfresco']['groupId'] = "org.alfresco"
       node.set['artifacts']['alfresco']['artifactId'] = "alfresco-core"

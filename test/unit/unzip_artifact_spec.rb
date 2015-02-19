@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'artifact-deployer::default' do
   let(:chef_run) do
-    ChefSpec::Runner.new(log_level: :info) do |node|
+    ChefSpec::SoloRunner.new(log_level: :info) do |node|
       node.set['artifacts']['junit_unzip']['enabled'] = true
       node.set['artifacts']['junit_unzip']['groupId'] = "junit"
       node.set['artifacts']['junit_unzip']['artifactId'] = "junit"
