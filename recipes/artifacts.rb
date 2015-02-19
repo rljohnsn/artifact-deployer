@@ -31,6 +31,7 @@ node['artifacts'].each do |artifactName, artifact|
   classifier      = artifact[:classifier] ? artifact[:classifier] : ""
   subfolder       = artifact[:subfolder] ? artifact[:subfolder] : ""
   destination     = artifact[:destination]
+  timeout         = artifact[:timeout]
   destinationName = artifact[:destinationName] ? artifact[:destinationName] : artifactName
   enabled         = artifact[:enabled] ? artifact[:enabled] : false
   properties      = artifact[:properties] ? artifact[:properties] : []
@@ -38,7 +39,7 @@ node['artifacts'].each do |artifactName, artifact|
   filtering_mode  = artifact[:filtering_mode] ? artifact[:filtering_mode] : "replace"
   fileNameWithExt = "#{destinationName}.#{artifactType}"
   destinationPath = "#{destination}/#{destinationName}"
-
+  
   if enabled == true
     log "Processing artifact #{destinationName}.#{artifactType}; unzip: #{unzip}"
     if path
@@ -58,6 +59,9 @@ node['artifacts'].each do |artifactName, artifact|
         version       version
         if classifier != ''
           classifier  classifier
+        end
+        if timeout != ''
+          timeout     timeout
         end
         action        :put
         dest          chef_cache
