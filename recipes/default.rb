@@ -4,13 +4,21 @@ m2_home         = node['maven']['m2_home']
 master_password = node['maven']['master_password']
 purge_settings = node['maven']['purge_settings']
 
+repos = data_bag('maven_repos')
+maven_repos = []
+
+repos.each do |repo|
+  repo_item = data_bag_item('maven_repos',repo)
+  maven_repos.push repo_item
+end
+
 template  "#{m2_home}/conf/settings.xml" do
   source  "settings.xml.erb"
   mode    0666
   owner   "root"
   group   "root"
   variables(
-    :repos => data_bag('maven_repos')
+    :repos => maven_repos
   )
 end
 

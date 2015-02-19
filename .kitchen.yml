@@ -22,7 +22,9 @@ suites:
           artifactId : "junit",
           version : "4.11",
           destination: "/home/vagrant/default_suite",
-          owner: "root"
+          owner: "root",
+          # Force failure by setting timeout to 1 sec
+          # timeout: 1
         },
         junit2: {
           groupId : "junit",

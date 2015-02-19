@@ -9,6 +9,7 @@ describe 'artifact-deployer::default' do
       node.set['artifacts']['alfresco']['version'] = "5.0.a"
       node.set['artifacts']['alfresco']['destination'] = "/opt/test"
       node.set['artifacts']['alfresco']['owner'] = "root"
+      node.set['artifacts']['alfresco']['timeout'] = 1000
     end.converge(described_recipe)
   end
 

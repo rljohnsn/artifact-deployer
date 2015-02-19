@@ -10,9 +10,9 @@
     <servers>
         <% @repos.each do |repo| %>
             <server>
-                <id><%= data_bag_item('maven_repos',repo)['id'] %></id>
-                <username><%= data_bag_item('maven_repos',repo)['username'] %></username>
-                <password><%= data_bag_item('maven_repos',repo)['password'] %></password>
+                <id><%= repo['id'] %></id>
+                <username><%= repo['username'] %></username>
+                <password><%= repo['password'] %></password>
             </server>
         <% end %>
     </servers>
