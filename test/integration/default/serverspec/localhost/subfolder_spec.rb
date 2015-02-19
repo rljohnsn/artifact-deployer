@@ -1,7 +1,4 @@
-require 'serverspec'
-
-include SpecInfra::Helper::Exec
-include SpecInfra::Helper::DetectOS
+require_relative 'default_spec'
 
 describe file('/home/vagrant/subfolder_suite/junit3') do
   it { should be_directory  }

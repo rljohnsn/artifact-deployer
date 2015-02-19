@@ -1,7 +1,4 @@
-require 'serverspec'
-
-include SpecInfra::Helper::Exec
-include SpecInfra::Helper::DetectOS
+require_relative 'default_spec'
 
 describe file('/home/vagrant/disabled_suite') do
   it { should_not be_file }
