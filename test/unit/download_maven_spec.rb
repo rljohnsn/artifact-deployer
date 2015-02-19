@@ -1,4 +1,4 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe 'artifact-deployer::default' do
   let(:chef_run) do
@@ -13,8 +13,17 @@ describe 'artifact-deployer::default' do
   end
 
   before do
+    stub_data_bag('maven_repos').and_return(['alfresco'])
+    stub_data_bag_item('maven_repos','alfresco').and_return({
+      'id' => 'alfresco',
+      'url' => 'https://artifacts.alfresco.com/nexus/content/groups/public',
+      'username' => '',
+      'password' => ''
+    })
+
     stub_command(start_with("test -f")).and_return(true)
   end
+
 
   it 'create junit.jar file' do
     expect(chef_run).to run_execute 'copying-package-junit.jar'

@@ -5,6 +5,7 @@ gem 'minitest'
 gem 'rake'
 gem 'rspec', '= 3.0.0'
 gem 'guard-rspec'
+gem 'chefspec'
 
 # allow CI to override the version of Chef for matrix testing
 gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
