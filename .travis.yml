@@ -1,4 +1,10 @@
 language: ruby
+
+-script:
+-- bundle exec rake knife
+-- bundle exec rake
+
 rvm:
   - 1.9.3-p547
+
 bundler_args: --without integration development
