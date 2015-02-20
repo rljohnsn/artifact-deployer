@@ -3,67 +3,142 @@ Artifact Deployer
 
 [![Build Status](https://travis-ci.org/maoo/artifact-deployer.svg)](https://travis-ci.org/maoo/artifact-deployer)
 
-A Chef Cookbook that provides a simple way to download, unpack and configure artifacts.
+A Chef Cookbook that provides a simple way to download, unpack and patch artifacts.
 Download is offered via
 - Maven GAV coordinates
 - HTTP Url
 - File-system path
+- S3 (file copy and bucket sync)
+
+# Artifact sources
+Configuration is done via Chef JSON attributes; hereby are examples for each source type.
+
+## Maven artifacts
 
 ```
 "artifacts": {
-    "solr-home": {
-        "enabled": true,
-        "url": "https://artifacts.alfresco.com/nexus/service/local/artifact/maven/redirect?r=releases&g=org.alfresco&a=alfresco-solr&v=5.0.a&e=zip&c=config",
-        "destination": "/var/lib/tomcat7",
-        "owner": "tomcat7",
-        "unzip": true
-    },
-    "alfresco": {
-        "enabled": true,
-        "groupId": "org.alfresco",
-        "artifactId": "alfresco",
-        "type": "war",
-        "version": "5.0.a",
-        "destination": "/var/lib/tomcat7/webapps",
-        "owner": "tomcat7"
-    },
-    "pathPrefix" : "/vagrant",
-    "my-amp": {
-        "enabled": true,
-        "path": "my-amp/target/my-amp.amp",
-        "destination": "/var/lib/tomcat7/amps",
-        "owner": "tomcat7"
-    }
+  "alfresco": {
+      "enabled": true,
+      "groupId": "org.alfresco",
+      "artifactId": "alfresco",
+      "type": "war",
+      "version": "5.0.a",
+      "destination": "/var/lib/tomcat7/webapps",
+      "owner": "tomcat7"
+  }
 }
 ```
-Unpacking and filtering
+Downloads `alfresco` WAR artifact and copies as `/var/lib/tomcat7/webapps/alfresco.war`
+
+You can add Maven Repositories as artifact sources defining `maven_repos` databag item, as follows:
+```
+{
+  "id" : "my-repo",
+  "url" : "https://my-repo.com/mvnrepo",
+  "username" : "user",
+  "password" : "pwd"
+}
+```
+Check [test maven_repos](test/integration/data_bags/maven_repos) databags for more samples.
+
+## HTTP URL
+
+```
+"artifacts": {
+  "junit": {
+    "enabled": true,
+    "url": "https://repo1.maven.org/maven2/junit/junit/4.9/junit-4.9.jar",
+    "destination": "/var/lib/tomcat7/lib",
+    "owner": "tomcat7"
+  }
+}
+```
+Downloads `junit-4.9.jar` and copies as `/var/lib/tomcat7/lib/junit.jar`
+
+## File-system path
+
+```
+"artifacts": {
+  "my-local-zip": {
+    "enabled": true,
+    "path": "/root/folder/my-zip.zip",
+    "destination": "/opt",
+    "owner": "myuser"
+  }
+}
+```
+Copies `/root/folder/my-zip.zip` into `/opt/my-local-zip.zip`
+
+## S3
+
+If you want to sync a bucket with a local folder
+```
+"artifacts": {
+  "my-s3-bucket-folder": {
+    "enabled": true,
+    "s3_bucket" : "artifact-deployer-test",
+    "destination": "/opt",
+    "owner": "myuser"
+  }
+}
+```
+Creates `/opt/my-s3-bucket-folder` directory with all `s3://artifact-deployer-test` bucket contents in it
+
+If you want to sync a bucket with a local folder
+```
+"artifacts": {
+  "my-s3-zip": {
+    "enabled": true,
+    "s3_bucket" : "artifact-deployer-test",
+    "s3_filename" : "keep-calm-and-daje-forte.png.zip",
+    "destination": "/opt",
+    "owner": "myuser"
+  }
+}
+```
+Downloads `keep-calm-and-daje-forte.png.zip` from `s3://artifact-deployer-test` bucket and copies as `/opt/my-s3-zip.zip`
+
+You can specify AWS key and secret defining `awscli` databag item, as follows:
+```
+{
+  "id" : "my-credentials",
+  "aws_access_key_id" : "AKI*****************",
+  "aws_secret_access_key" : "****************************************"
+}
+```
+Check [test awscli](test/integration/data_bags/awscli) databags for more samples.
+
+# Unpacking and filtering
 ---
 
 ```
 "artifacts": {
-    "solr-home": {
-        "enabled": true,
-        "url": "https://artifacts.alfresco.com/nexus/service/local/artifact/maven/redirect?r=releases&g=org.alfresco&a=alfresco-solr&v=5.0.a&e=zip&c=config",
-        "destination": "/var/lib/tomcat7",
-        "owner": "tomcat7",
-        "unzip": true,
-        "filtering_mode" : "replace",
-        "properties" : {
-          "archive-SpacesStore/conf/solrcore.properties" : [
-            "alfresco.host" : "192.168.0.22",
-            "solr.secureComms" : "none"
-          ],
-          "test.properties" : [
-            "my.host" : "192.168.0.22",
-            "filtering_mode" : "append"
-          ]
-        },
-        "terms" : {
-          "context.xml" : [
-            "@@ALFRESCO_HOST@@" : "192.168.0.22"
-          ]
-        }
+  "solr-home": {
+    "enabled": true,
+    "groupId": "org.alfresco",
+    "artifactId": "alfresco-solr",
+    "type": "zip",
+    "version": "5.0.a",
+    "destination": "/var/lib/tomcat7",
+    "owner": "tomcat7",
+    "unzip": true,
+    "filtering_mode" : "replace",
+    "properties" : {
+      "archive-SpacesStore/conf/solrcore.properties" : [
+        "alfresco.host" : "192.168.0.22",
+        "solr.secureComms" : "none"
+      ],
+      "test.properties" : [
+        "my.host" : "192.168.0.22",
+        "filtering_mode" : "append"
+      ]
+    },
+    "terms" : {
+      "context.xml" : [
+        "@@ALFRESCO_HOST@@" : "192.168.0.22"
+      ]
     }
+  }
 }
 ```
 
@@ -77,10 +152,9 @@ When using ```properties```, a file line starting with ```<key>=``` will be sear
 
 ```filtering_mode``` can be specified at artifact level or as an attribute of properties, as shown in the example above.
 
-Unpacking options
----
+## Unpacking options
 
-#### Artifact name
+### Artifact name
 
 The name of the file/folder fetched by artifact-deployer can be customised; by default it is the name of the JSON key (i.e `my-amp`), but you can override it using `destinationName` attribute:
 
@@ -115,49 +189,12 @@ You can only include one specific subfolder of a ZIP, using the following syntax
 }
 ```
 
-Maven Private Repositories
----
-To access private Maven repositories, you can easily define your credentials (password encryption is supported, although it's strongly recommended to wipe out your Maven settings right after Chef installation is terminated)
-
-```
-"maven": {
-    "repos": {
-        "maven-repo-id": {
-            "url": "https://your.maven.repo/repo",
-            "username": "mavenrepo-user",
-            "password": "mavenrepo-pwd"
-        }
-    }
-}
-```
-
-DNS and JVM Utils
----
-Artifact Deployer also includes some DNS and JVM utils to automate AWS deployments.
-
-The following configuration contains:
-- JVM ```-Dhost=hostname.domain``` param; hostname and domain are taken from AWS OpsWorks attributes
-- Route53 Zone (and AWS auth) info that allows to subscribe the current machine DNS entry
-
-```
-"jvm_host" : {
-    "add_host_param" : true
-},
-"route53" : {
-    "zone_id" : "XXXXXXXXXXXX",
-    "aws_access_key_id" : "XXXXXXXXXXXXXXXXXXXX",
-    "aws_secret_access_key" : "XXXXXXXXXXXXXXXXXXXX/XXXXXXXXXXXXXXXXXXXX"
-}
-```
-
-Testing
----
-```
-gem install rspec chefspec chef-librarian test-kitchen
-
 # Unit testing
-rspec
+```
+bundle exec rake
+```
 
 # Integration testing
-kitchen
+```
+kitchen test
 ```

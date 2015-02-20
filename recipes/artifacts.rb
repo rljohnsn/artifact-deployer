@@ -28,6 +28,8 @@ node['artifacts'].each do |artifactName, artifact|
   group_id        = artifact[:groupId]
   version         = artifact[:version]
   artifactType    = artifact[:type] ? artifact[:type] : "jar"
+  s3_bucket       = artifact[:s3_bucket]
+  s3_filename     = artifact[:s3_filename]
   owner           = artifact[:owner] ? artifact[:owner] : "root"
   unzip           = artifact[:unzip] ? artifact[:unzip] : false
   classifier      = artifact[:classifier] ? artifact[:classifier] : ""
@@ -70,6 +72,15 @@ node['artifacts'].each do |artifactName, artifact|
         owner         owner
         packaging     artifactType
         repositories  maven_repos_str
+      end
+    elsif s3_bucket and s3_filename
+      execute "s3-cp-#{s3_filename}" do
+        command "aws s3 cp s3://#{s3_bucket}/#{s3_filename} #{chef_cache}/#{destinationName}"
+      end
+    elsif s3_bucket
+      execute "sync-snort-file-source" do
+        command "aws s3 sync s3://#{s3_bucket} #{chef_cache}/#{destinationName}"
+        returns [0,2]
       end
     end
 

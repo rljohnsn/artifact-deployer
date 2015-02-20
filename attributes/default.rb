@@ -15,8 +15,3 @@ default['artifact-deployer']['maven']['timeout'] = 600
 default['artifact-deployer']['awscli']['credentials_databag'] = "awscli"
 default['artifact-deployer']['awscli']['credentials_databag_item'] = "credentials"
 default['artifact-deployer']['awscli']['credentials_parent_path'] = "/root/.aws"
-
-default['jvm_host']['tomcat_defaults_path'] = "/etc/default/tomcat7"
-default['jvm_host']['add_host_param'] = false
-default['jvm_host']['param_name'] = "host"
-default['jvm_host']['hostname'] = "#{node['hostname']}.#{node['domain']}"

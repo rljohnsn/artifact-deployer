@@ -42,6 +42,20 @@ suites:
           destination: "/home/vagrant/subfolder_suite",
           subfolder: "META-INF/\\*",
           owner: "root"
+        },
+        s3bucket: {
+          enabled: true,
+          s3_bucket: "artifact-deployer-test",
+          destination: "/home/vagrant",
+          owner: "root"
+        },
+        s3file: {
+          enabled: true,
+          unzip: true,
+          s3_bucket: "artifact-deployer-test",
+          s3_filename: "keep-calm-and-daje-forte.png.zip",
+          destination: "/home/vagrant",
+          owner: "root"
         }
       }
     }

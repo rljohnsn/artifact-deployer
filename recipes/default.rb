@@ -5,8 +5,6 @@ purge_settings           = node['artifact-deployer']['maven']['purge_settings']
 include_recipe "artifact-deployer::awscli"
 include_recipe "artifact-deployer::maven"
 include_recipe "artifact-deployer::artifacts"
-include_recipe "artifact-deployer::route53"
-include_recipe "artifact-deployer::jvm_host"
 
 if purge_settings == true
   file "#{m2_home}/conf/settings.xml" do
