@@ -1,6 +1,7 @@
 term_delimiter_start = node['term_delimiter_start']
 term_delimiter_end = node['term_delimiter_end']
 property_equals_sign = node['property_equals_sign']
+global_timeout = node['maven']['timeout']
 
 repos = data_bag('maven_repos')
 maven_repos_str = []
@@ -32,7 +33,7 @@ node['artifacts'].each do |artifactName, artifact|
   classifier      = artifact[:classifier] ? artifact[:classifier] : ""
   subfolder       = artifact[:subfolder] ? artifact[:subfolder] : ""
   destination     = artifact[:destination]
-  timeout         = artifact[:timeout]
+  timeout         = artifact[:timeout] ? artifact[:timeout] : global_timeout
   destinationName = artifact[:destinationName] ? artifact[:destinationName] : artifactName
   enabled         = artifact[:enabled] ? artifact[:enabled] : false
   properties      = artifact[:properties] ? artifact[:properties] : []
