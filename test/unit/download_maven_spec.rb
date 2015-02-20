@@ -9,6 +9,7 @@ describe 'artifact-deployer::default' do
       node.set['artifacts']['junit']['version'] = "4.11"
       node.set['artifacts']['junit']['destination'] = "/opt/test"
       node.set['artifacts']['junit']['owner'] = "root"
+      node.set['artifact-deployer']['install_awscli'] = false
     end.converge(described_recipe)
   end
 
@@ -29,7 +30,7 @@ describe 'artifact-deployer::default' do
     expect(chef_run).to run_execute 'copying-package-junit.jar'
   end
 
-  it 'create mvn settings' do
+  it 'delete mvn settings' do
     expect(chef_run).to delete_file '/usr/local/maven/conf/settings.xml'
   end
 

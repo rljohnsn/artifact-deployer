@@ -14,6 +14,7 @@ describe 'artifact-deployer::default' do
   end
 
   before do
+
     stub_data_bag('maven_repos').and_return(['alfresco'])
     stub_data_bag_item('maven_repos','alfresco').and_return({
       'id' => 'alfresco',
@@ -22,7 +23,15 @@ describe 'artifact-deployer::default' do
       'password' => ''
     })
 
+    stub_data_bag('my-databag').and_return(['my-databag-item'])
+    stub_data_bag_item('awscli','credentials').and_return({
+      "id" => "credentials",
+      "aws_access_key_id" => "test",
+      "aws_secret_access_key" => "test"
+    })
+
     stub_command(start_with("test -f")).and_return(true)
+    stub_command("pip list | grep awscli").and_return('')
   end
 
   it 'create alfresco.jar file' do

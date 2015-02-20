@@ -10,6 +10,7 @@ describe 'artifact-deployer::default' do
       node.set['artifacts']['junit_unzip']['destination'] = "/opt/test"
       node.set['artifacts']['junit_unzip']['owner'] = "root"
       node.set['artifacts']['junit_unzip']['unzip'] = true
+      node.set['artifact-deployer']['install_awscli'] = false
     end.converge(described_recipe)
   end
 

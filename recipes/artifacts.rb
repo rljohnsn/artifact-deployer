@@ -1,7 +1,7 @@
-term_delimiter_start = node['term_delimiter_start']
-term_delimiter_end = node['term_delimiter_end']
-property_equals_sign = node['property_equals_sign']
-global_timeout = node['maven']['timeout']
+term_delimiter_start = node['artifact-deployer']['term_delimiter_start']
+term_delimiter_end = node['artifact-deployer']['term_delimiter_end']
+property_equals_sign = node['artifact-deployer']['property_equals_sign']
+global_timeout = node['artifact-deployer']['maven']['timeout']
 
 repos = data_bag('maven_repos')
 maven_repos_str = []

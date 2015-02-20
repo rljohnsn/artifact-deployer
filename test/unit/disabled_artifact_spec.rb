@@ -9,6 +9,7 @@ describe 'artifact-deployer::default' do
       node.set['artifacts']['junit_disabled']['version'] = "4.11"
       node.set['artifacts']['junit_disabled']['destination'] = "/opt/test"
       node.set['artifacts']['junit_disabled']['owner'] = "root"
+      node.set['artifact-deployer']['install_awscli'] = false
     end.converge(described_recipe)
   end
 

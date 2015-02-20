@@ -8,8 +8,11 @@ version           "0.7.5"
 
 depends "maven"
 depends "file"
+depends "python"
 
-recipe 'default', 'Installs Apache Maven'
-recipe 'artifacts', 'Installs Maven artifacts'
+recipe 'default', 'Invokes all other recipes'
+recipe 'maven', 'Installs Apache Maven'
+recipe 'awscli', 'Installs Python awscli util'
+recipe 'artifacts', 'Installs artifacts'
 recipe 'route53', 'Installs Maven artifacts'
 recipe 'jvm_host', 'Adds -Dhost=#{node[:hostname]}.#{node[:rdomain]} to the JVM opts, appending it to a configurable file location'
