@@ -1,5 +1,6 @@
 default['artifact-deployer']['install_maven'] = true
 default['artifact-deployer']['install_awscli'] = true
+default['artifact-deployer']['force_awscli_commandline_install'] = false
 
 default['artifact-deployer']['restart_services'] = []
 # default['restart_services'] = ['tomcat7']

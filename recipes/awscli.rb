@@ -4,8 +4,15 @@ if node['artifact-deployer']['install_awscli']
   credentials_databag_item = node['artifact-deployer']['awscli']['credentials_databag_item']
   credentials_parent_path  = node['artifact-deployer']['awscli']['credentials_parent_path']
 
-  include_recipe 'python::default'
-  python_pip "awscli"
+  if node['artifact-deployer']['force_awscli_commandline_install']
+    execute "install-awscli" do
+      command "pip install awscli"
+      not_if "pip list | grep awscli"
+    end
+  else
+    include_recipe 'python::default'
+    python_pip "awscli"
+  end
 
   directory credentials_parent_path do
     mode '0755'

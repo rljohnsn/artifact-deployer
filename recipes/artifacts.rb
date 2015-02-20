@@ -11,7 +11,8 @@ repos.each do |repo|
   maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
 end
 
-chef_cache   = Chef::Config[:file_cache_path]
+chef_cache   = node['artifact-deployer']['cache_folder'] ? node['artifact-deployer']['cache_folder'] : Chef::Config[:file_cache_path]
+
 directory   "chef-cache" do
   path      chef_cache
   owner     "root"
@@ -81,6 +82,11 @@ node['artifacts'].each do |artifactName, artifact|
       execute "sync-snort-file-source" do
         command "aws s3 sync s3://#{s3_bucket} #{chef_cache}/#{destinationName}"
         returns [0,2]
+      end
+      execute "copying-folder-#{destinationName}" do
+        command     "cp -Rf #{chef_cache}/#{destinationName} #{destination}/#{destinationName}; chown -R #{owner} #{destination}/#{destinationName}"
+        user        owner
+        only_if     "test -d #{chef_cache}/#{destinationName}"
       end
     end
 
