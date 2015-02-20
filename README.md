@@ -159,9 +159,8 @@ When using ```properties```, a file line starting with ```<key>=``` will be sear
 The name of the file/folder fetched by artifact-deployer can be customised; by default it is the name of the JSON key (i.e `my-amp`), but you can override it using `destinationName` attribute:
 
 ```
-{
-  ...
-  "my-amp": {
+"artifacts": {
+    "my-amp": {
     "enabled": true,
     "path": "my-amp/target/my-amp.amp",
     "destinationName" : "my.amp"
@@ -175,9 +174,8 @@ The name of the file/folder fetched by artifact-deployer can be customised; by d
 You can only include one specific subfolder of a ZIP, using the following syntax:
 
 ```
-{
-  ...
-  "sharedclasses": {
+"artifacts": {
+  "keystore": {
     "enabled": true,
     "groupId" : "org.alfresco",
     "artifactId" : "alfresco-repository",
