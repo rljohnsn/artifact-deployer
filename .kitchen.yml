@@ -6,13 +6,12 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: centos-7.0
+  - name: centos-6.6
 
 suites:
   - name: default
     data_bags_path: "test/integration/data_bags"
     run_list:
-      - recipe[apt::default]
       - recipe[artifact-deployer::default]
     attributes: {
       artifacts: {

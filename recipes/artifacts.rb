@@ -76,10 +76,10 @@ node['artifacts'].each do |artifactName, artifact|
       end
     elsif s3_bucket and s3_filename
       execute "s3-cp-#{s3_filename}" do
-        command "aws s3 cp s3://#{s3_bucket}/#{s3_filename} #{chef_cache}/#{destinationName}"
+        command "aws s3 cp s3://#{s3_bucket}/#{s3_filename} #{chef_cache}/#{fileNameWithExt}"
       end
     elsif s3_bucket
-      execute "sync-snort-file-source" do
+      execute "sync-s3://#{s3_bucket}" do
         command "aws s3 sync s3://#{s3_bucket} #{chef_cache}/#{destinationName}"
         returns [0,2]
       end
