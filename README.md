@@ -74,6 +74,7 @@ Copies `/root/folder/my-zip.zip` into `/opt/my-local-zip.zip`
 ## S3
 
 If you want to sync a bucket with a local folder
+
 ```
 "artifacts": {
   "my-s3-bucket-folder": {
