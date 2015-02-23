@@ -7,8 +7,6 @@ gem 'rspec', '= 3.0.0'
 gem 'guard-rspec'
 gem 'chefspec'
 gem 'berkshelf', '~> 3.1.5'
-gem 'test-kitchen', '~> 1.2.1'
-gem 'kitchen-vagrant', '~> 0.15.0'
 
 # Travis is failing with this set of gems
 # gem 'foodcritic'
@@ -26,4 +24,9 @@ gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
 
 group :development do
   gem 'emeril'
+end
+
+group :integration do
+  gem 'test-kitchen', '~> 1.3.1'
+  gem 'kitchen-vagrant', '~> 0.15.0'
 end
