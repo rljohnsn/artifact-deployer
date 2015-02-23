@@ -5,6 +5,7 @@ Artifact Deployer
 
 A Chef Cookbook that provides a simple way to download, unpack and patch artifacts.
 Download is offered via
+
 - Maven GAV coordinates
 - HTTP Url
 - File-system path
