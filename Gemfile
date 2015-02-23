@@ -11,7 +11,7 @@ gem 'berkshelf', '=3.2.3'
 # TODO use emeril or stove
 group :development do
   # gem 'emeril'
-  gem 'stove'
+  gem 'stove', '=3.2.5'
 end
 
 group :integration do
