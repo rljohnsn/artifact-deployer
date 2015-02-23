@@ -17,8 +17,6 @@ gem 'rspec'
 gem 'guard-rspec'
 gem 'chefspec'
 gem 'berkshelf'
-gem 'test-kitchen'
-gem 'kitchen-vagrant'
 
 # allow CI to override the version of Chef for matrix testing
 # gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
