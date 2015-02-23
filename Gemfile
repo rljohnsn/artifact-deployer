@@ -1,30 +1,32 @@
 source 'https://rubygems.org'
 
-gem 'foodcritic', '~> 3.0.3'
-gem 'minitest'
-gem 'rake'
-gem 'rspec', '= 3.0.0'
-gem 'guard-rspec'
-gem 'chefspec'
-gem 'berkshelf', '~> 3.1.5'
-
-# Travis is failing with this set of gems
-# gem 'foodcritic'
+# Old versions used
+# gem 'foodcritic', '~> 3.0.3'
 # gem 'minitest'
 # gem 'rake'
-# gem 'rspec'
+# gem 'rspec', '= 3.0.0'
 # gem 'guard-rspec'
 # gem 'chefspec'
-# gem 'berkshelf'
-# gem 'test-kitchen'
-# gem 'kitchen-vagrant'
+# gem 'berkshelf', '~> 3.1.5'
+
+# TODO - add specific versions
+gem 'foodcritic'
+gem 'minitest'
+gem 'rake'
+gem 'rspec'
+gem 'guard-rspec'
+gem 'chefspec'
+gem 'berkshelf'
+gem 'test-kitchen'
+gem 'kitchen-vagrant'
 
 # allow CI to override the version of Chef for matrix testing
-gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
+# gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
 
-group :development do
-  gem 'emeril'
-end
+# TODO use emeril or stove
+# group :development do
+#   gem 'emeril'
+# end
 
 group :integration do
   gem 'test-kitchen', '~> 1.3.1'

@@ -3,8 +3,8 @@ language: ruby
 # rvm:
 #   - 1.9.3-p547
 
-# Ruby version used by ChefDK
-rvm:
-  - 2.1.4p265
+# Ruby version used by ChefDK, not working with Travis
+# rvm:
+#   - 2.1.4p265
 
 bundler_args: --without integration development
