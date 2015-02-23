@@ -24,10 +24,17 @@ task :unit do
 end
 
 begin
+  require 'stove/rake_tasks'
+  Kitchen::RakeTasks.new
+rescue LoadError
+  puts ">>>>> Stove gem not loaded, omitting release tasks" unless ENV['CI']
+end
+
+begin
   require 'kitchen/rake_tasks'
   Kitchen::RakeTasks.new
 rescue LoadError
-  puts ">>>>> Kitchen gem not loaded, omitting tasks" unless ENV['CI']
+  puts ">>>>> Kitchen gem not loaded, omitting kitchen tasks" unless ENV['CI']
 end
 
 task :default => [:foodcritic, :knife, :unit]
