@@ -3,7 +3,6 @@
 require 'foodcritic'
 require 'rspec/core/rake_task'
 require 'stove/rake_task'
-Stove::RakeTask.new
 
 desc "Runs knife cookbook test"
 task :knife do
@@ -25,7 +24,7 @@ end
 
 begin
   require 'stove/rake_tasks'
-  Kitchen::RakeTasks.new
+  Stove::RakeTask.new
 rescue LoadError
   puts ">>>>> Stove gem not loaded, omitting release tasks" unless ENV['CI']
 end
