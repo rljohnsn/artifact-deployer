@@ -21,16 +21,6 @@ task :unit do
   end
 end
 
-desc "Runs rspec tests in test/unit folder"
-task :release do
-  begin
-    require 'stove/rake_tasks'
-    Stove::RakeTask.new
-  rescue LoadError
-    puts ">>>>> Stove gem not loaded, omitting release tasks" unless ENV['CI']
-  end
-end
-
 task :integration do
   begin
     require 'kitchen/rake_tasks'

@@ -12,7 +12,7 @@ stove login --username maoo --key ~/.ssh/supermarket-maoo.pem
 ### Releasing the current version
 
 ```
-rake publish
+stove
 ```
 
 Versions are manually handled in metadata.rb
