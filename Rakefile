@@ -2,7 +2,6 @@
 
 require 'foodcritic'
 require 'rspec/core/rake_task'
-require 'stove/rake_task'
 
 desc "Runs knife cookbook test"
 task :knife do
