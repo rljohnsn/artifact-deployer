@@ -1,25 +1,12 @@
 source 'https://rubygems.org'
 
-# Old versions used
-# gem 'foodcritic', '~> 3.0.3'
-# gem 'minitest'
-# gem 'rake'
-# gem 'rspec', '= 3.0.0'
-# gem 'guard-rspec'
-# gem 'chefspec'
-# gem 'berkshelf', '~> 3.1.5'
-
-# TODO - add specific versions
-gem 'foodcritic'
-gem 'minitest'
-gem 'rake'
-gem 'rspec'
-gem 'guard-rspec'
-gem 'chefspec'
-gem 'berkshelf'
-
-# allow CI to override the version of Chef for matrix testing
-# gem 'chef', (ENV['CHEF_VERSION'] || '>= 0.10.10')
+gem 'foodcritic', '=4.0.0'
+gem 'minitest', '=5.5.1'
+gem 'rake', '=10.4.2'
+gem 'rspec', '=3.2.0'
+gem 'guard-rspec', '=4.5.0'
+gem 'chefspec', '=4.2.0'
+gem 'berkshelf', '=3.2.3'
 
 # TODO use emeril or stove
 # group :development do
