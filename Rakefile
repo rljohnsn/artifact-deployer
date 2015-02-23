@@ -3,6 +3,7 @@
 require 'foodcritic'
 require 'rspec/core/rake_task'
 require 'stove/rake_task'
+Stove::RakeTask.new
 
 desc "Runs knife cookbook test"
 task :knife do
@@ -20,11 +21,6 @@ task :unit do
   RSpec::Core::RakeTask.new(:unit) do |t|
     t.pattern = "test/unit/**/*_spec.rb"
   end
-end
-
-desc "Releases artifact-deployer cookbook"
-task :release do
-  Stove::RakeTask.new
 end
 
 begin
