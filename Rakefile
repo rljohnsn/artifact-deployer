@@ -21,18 +21,23 @@ task :unit do
   end
 end
 
-begin
-  require 'stove/rake_tasks'
-  Stove::RakeTask.new
-rescue LoadError
-  puts ">>>>> Stove gem not loaded, omitting release tasks" unless ENV['CI']
+desc "Runs rspec tests in test/unit folder"
+task :release do
+  begin
+    require 'stove/rake_tasks'
+    Stove::RakeTask.new
+  rescue LoadError
+    puts ">>>>> Stove gem not loaded, omitting release tasks" unless ENV['CI']
+  end
 end
 
-begin
-  require 'kitchen/rake_tasks'
-  Kitchen::RakeTasks.new
-rescue LoadError
-  puts ">>>>> Kitchen gem not loaded, omitting kitchen tasks" unless ENV['CI']
+task :integration do
+  begin
+    require 'kitchen/rake_tasks'
+    Kitchen::RakeTasks.new
+  rescue LoadError
+    puts ">>>>> Kitchen gem not loaded, omitting kitchen tasks" unless ENV['CI']
+  end
 end
 
 task :default => [:foodcritic, :knife, :unit]
