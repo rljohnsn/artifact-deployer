@@ -41,7 +41,7 @@ You can add Maven Repositories as artifact sources defining `maven_repos` databa
   "password" : "pwd"
 }
 ```
-Check [test maven_repos](test/integration/data_bags/maven_repos) databags for more samples.
+Check [test maven_repos](https://github.com/maoo/artifact-deployer/tree/master/test/integration/data_bags/maven_repos) databags for more samples.
 
 ## HTTP URL
 
@@ -111,7 +111,7 @@ You can specify AWS key and secret defining `awscli` databag item, as follows:
   "aws_secret_access_key" : "****************************************"
 }
 ```
-Check [test awscli](test/integration/data_bags/awscli) databags for more samples.
+Check [test awscli](https://github.com/maoo/artifact-deployer/tree/master/test/integration/data_bags/awscli) databags for more samples.
 
 # Unpacking and filtering
 ---

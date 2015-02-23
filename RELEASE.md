@@ -1,6 +1,6 @@
 ## Release
 
-artifact-deployer uses [stove](http://sethvargo.github.io/stove/) to release and tag artifacts and Supermarket to store binaries.
+artifact-deployer uses [stove](http://sethvargo.github.io/stove/) to release/tag artifacts on [Supermarket](https://supermarket.chef.io/cookbooks/artifact-deployer)
 
 ### Configuring Supermarket login
 
@@ -15,4 +15,4 @@ stove login --username maoo --key ~/.ssh/supermarket-maoo.pem
 stove
 ```
 
-Versions are manually handled in metadata.rb
+Versions are manually handled (bumped) in metadata.rb; if you try to release an existing version, you will get an error from github when trying to create the tag (tag already exist)
