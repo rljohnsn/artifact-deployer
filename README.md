@@ -31,6 +31,7 @@ Configuration is done via Chef JSON attributes; hereby are examples for each sou
 Downloads `alfresco` WAR artifact and copies as `/var/lib/tomcat7/webapps/alfresco.war`
 
 You can add Maven Repositories as artifact sources defining `maven_repos` databag item, as follows:
+
 ```
 {
   "id" : "my-repo",
@@ -85,6 +86,7 @@ If you want to sync a bucket with a local folder
 Creates `/opt/my-s3-bucket-folder` directory with all `s3://artifact-deployer-test` bucket contents in it
 
 If you want to sync a bucket with a local folder
+
 ```
 "artifacts": {
   "my-s3-zip": {
@@ -99,6 +101,7 @@ If you want to sync a bucket with a local folder
 Downloads `keep-calm-and-daje-forte.png.zip` from `s3://artifact-deployer-test` bucket and copies as `/opt/my-s3-zip.zip`
 
 You can specify AWS key and secret defining `awscli` databag item, as follows:
+
 ```
 {
   "id" : "my-credentials",
