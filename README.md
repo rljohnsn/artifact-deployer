@@ -189,6 +189,7 @@ You can only include one specific subfolder of a ZIP, using the following syntax
 
 # Unit testing
 ```
+bundle update
 bundle exec rake
 ```
 
