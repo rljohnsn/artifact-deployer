@@ -9,9 +9,10 @@ gem 'chefspec', '=4.2.0'
 gem 'berkshelf', '=3.2.3'
 
 # TODO use emeril or stove
-# group :development do
-#   gem 'emeril'
-# end
+group :development do
+  # gem 'emeril'
+  gem 'stove'
+end
 
 group :integration do
   gem 'test-kitchen', '~> 1.3.1'

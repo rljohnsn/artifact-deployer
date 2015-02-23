@@ -2,6 +2,7 @@
 
 require 'foodcritic'
 require 'rspec/core/rake_task'
+require 'stove/rake_task'
 
 desc "Runs knife cookbook test"
 task :knife do
@@ -10,11 +11,20 @@ end
 
 desc "Runs foodcritic test"
 task :foodcritic do
+  FoodCritic::Rake::LintTask.new
   sh "bundle exec foodcritic -f any ."
 end
 
-RSpec::Core::RakeTask.new(:unit) do |t|
-  t.pattern = "test/unit/**/*_spec.rb"
+desc "Runs rspec tests in test/unit folder"
+task :unit do
+  RSpec::Core::RakeTask.new(:unit) do |t|
+    t.pattern = "test/unit/**/*_spec.rb"
+  end
+end
+
+desc "Releases artifact-deployer cookbook"
+task :release do
+  Stove::RakeTask.new
 end
 
 begin
@@ -25,4 +35,3 @@ rescue LoadError
 end
 
 task :default => [:foodcritic, :knife, :unit]
-FoodCritic::Rake::LintTask.new
