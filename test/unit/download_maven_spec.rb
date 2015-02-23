@@ -10,6 +10,7 @@ describe 'artifact-deployer::default' do
       node.set['artifacts']['junit']['destination'] = "/opt/test"
       node.set['artifacts']['junit']['owner'] = "root"
       node.set['artifact-deployer']['install_awscli'] = false
+      node.set['artifact-deployer']['maven']['purge_settings'] = true
     end.converge(described_recipe)
   end
 
