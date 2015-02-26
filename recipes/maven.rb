@@ -4,41 +4,47 @@ if node['artifact-deployer']['install_maven']
 
   m2_home         = node['maven']['m2_home']
   master_password = node['artifact-deployer']['maven']['master_password']
+  repos_databag   = node['artifact-deployer']['maven']['repos_databag']
 
-  repos = data_bag('maven_repos')
-  maven_repos = []
+  begin
+    repos = data_bag(repos_databag)
 
-  repos.each do |repo|
-    repo_item = data_bag_item('maven_repos',repo)
-    maven_repos.push repo_item
-  end
+    maven_repos = []
 
-  template  "#{m2_home}/conf/settings.xml" do
-    source  "settings.xml.erb"
-    mode    0666
-    owner   "root"
-    group   "root"
-    variables(
-      :repos => maven_repos
-    )
-  end
+    repos.each do |repo|
+      repo_item = data_bag_item(repos_databag,repo)
+      maven_repos.push repo_item
+    end
 
-  if !master_password.empty?
-    directory  "/root/.m2" do
+    template  "#{m2_home}/conf/settings.xml" do
+      source  "settings.xml.erb"
       mode    0666
       owner   "root"
       group   "root"
+      variables(
+        :repos => maven_repos
+      )
     end
 
-    template  "/root/.m2/settings-security.xml" do
-      source  "settings-security.xml.erb"
-      mode    0666
-      owner   "root"
-      group   "root"
-    end
-  end
+    if !master_password.empty?
+      directory  "/root/.m2" do
+        mode    0666
+        owner   "root"
+        group   "root"
+      end
 
-  link "/usr/bin/mvn" do
-    to "/usr/local/maven/bin/mvn"
+      template  "/root/.m2/settings-security.xml" do
+        source  "settings-security.xml.erb"
+        mode    0666
+        owner   "root"
+        group   "root"
+      end
+    end
+
+    link "/usr/bin/mvn" do
+      to "/usr/local/maven/bin/mvn"
+    end
+  rescue
+    Chef::Log.warn("Cannot find databag "+repos_databag+"; skipping Maven installation")
   end
 end

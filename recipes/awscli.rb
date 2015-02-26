@@ -3,6 +3,7 @@ if node['artifact-deployer']['install_awscli']
   credentials_databag      = node['artifact-deployer']['awscli']['credentials_databag']
   credentials_databag_item = node['artifact-deployer']['awscli']['credentials_databag_item']
   credentials_parent_path  = node['artifact-deployer']['awscli']['credentials_parent_path']
+  aws_config_file          = "#{credentials_parent_path}/credentials"
 
   if node['artifact-deployer']['force_awscli_commandline_install']
     execute "install-awscli" do
@@ -19,14 +20,17 @@ if node['artifact-deployer']['install_awscli']
     action :create
   end
 
-  aws_credentials = data_bag_item(credentials_databag,credentials_databag_item)
-  aws_config_file = "#{credentials_parent_path}/credentials"
-
-  aws_config = "[default]
+  begin
+    aws_credentials = data_bag_item(credentials_databag,credentials_databag_item)
+    aws_config = "[default]
 aws_access_key_id=#{aws_credentials['aws_access_key_id']}
 aws_secret_access_key=#{aws_credentials['aws_secret_access_key']}"
 
-  file aws_config_file do
-    content aws_config
+    file aws_config_file do
+      content aws_config
+    end
+  rescue
+    Chef::Log.warn("Cannot find databag "+credentials_databag+" with item "+
+    credentials_databag_item+"; skipping "+aws_config_file+ " file creation")
   end
 end

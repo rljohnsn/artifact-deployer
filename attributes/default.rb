@@ -9,6 +9,7 @@ default['artifact-deployer']['term_delimiter_start'] = "@@"
 default['artifact-deployer']['term_delimiter_end'] = "@@"
 default['artifact-deployer']['property_equals_sign'] = "="
 
+default['artifact-deployer']['maven']['repos_databag'] = "maven_repos"
 default['artifact-deployer']['maven']['master_password'] = ""
 default['artifact-deployer']['maven']['purge_settings'] = false
 default['artifact-deployer']['maven']['timeout'] = 600

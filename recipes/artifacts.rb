@@ -2,13 +2,17 @@ term_delimiter_start = node['artifact-deployer']['term_delimiter_start']
 term_delimiter_end = node['artifact-deployer']['term_delimiter_end']
 property_equals_sign = node['artifact-deployer']['property_equals_sign']
 global_timeout = node['artifact-deployer']['maven']['timeout']
+repos_databag = node['artifact-deployer']['maven']['repos_databag']
 
-repos = data_bag('maven_repos')
 maven_repos_str = []
-
-repos.each do |repo|
-  repo = data_bag_item('maven_repos',repo)
-  maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
+begin
+  repos = data_bag(repos_databag)
+  repos.each do |repo|
+    repo = data_bag_item('maven_repos',repo)
+    maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
+  end
+rescue
+  Chef::Log.warn("Cannot find databag "+repos_databag+"; skipping repo option in Maven commands")
 end
 
 chef_cache   = node['artifact-deployer']['cache_folder'] ? node['artifact-deployer']['cache_folder'] : Chef::Config[:file_cache_path]
@@ -22,121 +26,124 @@ directory   "chef-cache" do
 end
 
 pathPrefix = node['artifactPathPrefix']
-node['artifacts'].each do |artifactName, artifact|
-  url             = artifact[:url]
-  path            = artifact[:path] ? "#{pathPrefix}/#{artifact[:path]}" : nil
-  artifact_id     = artifact[:artifactId]
-  group_id        = artifact[:groupId]
-  version         = artifact[:version]
-  artifactType    = artifact[:type] ? artifact[:type] : "jar"
-  s3_bucket       = artifact[:s3_bucket]
-  s3_filename     = artifact[:s3_filename]
-  owner           = artifact[:owner] ? artifact[:owner] : "root"
-  unzip           = artifact[:unzip] ? artifact[:unzip] : false
-  classifier      = artifact[:classifier] ? artifact[:classifier] : ""
-  subfolder       = artifact[:subfolder] ? artifact[:subfolder] : ""
-  destination     = artifact[:destination]
-  timeout         = artifact[:timeout] ? artifact[:timeout] : global_timeout
-  destinationName = artifact[:destinationName] ? artifact[:destinationName] : artifactName
-  enabled         = artifact[:enabled] ? artifact[:enabled] : false
-  properties      = artifact[:properties] ? artifact[:properties] : []
-  terms           = artifact[:terms] ? artifact[:terms] : []
-  filtering_mode  = artifact[:filtering_mode] ? artifact[:filtering_mode] : "replace"
-  fileNameWithExt = "#{destinationName}.#{artifactType}"
-  destinationPath = "#{destination}/#{destinationName}"
 
-  if enabled == true
-    log "Processing artifact #{destinationName}.#{artifactType}; unzip: #{unzip}"
-    if path
-      fileNameWithExt = File.basename(path)
-      execute "cache-artifact-#{destinationName}" do
-        command       "cp -Rf #{path} #{chef_cache}/#{fileNameWithExt}"
-      end
-    elsif url
-      fileNameWithExt = File.basename(url)
-      remote_file     "#{chef_cache}/#{fileNameWithExt}" do
-        source        url
-      end
-    elsif artifact_id and group_id and version
-      maven artifactName do
-        artifact_id   artifact_id
-        group_id      group_id
-        version       version
-        if classifier != ''
-          classifier  classifier
+unless node['artifacts'] == nil
+  node['artifacts'].each do |artifactName, artifact|
+    url             = artifact[:url]
+    path            = artifact[:path] ? "#{pathPrefix}/#{artifact[:path]}" : nil
+    artifact_id     = artifact[:artifactId]
+    group_id        = artifact[:groupId]
+    version         = artifact[:version]
+    artifactType    = artifact[:type] ? artifact[:type] : "jar"
+    s3_bucket       = artifact[:s3_bucket]
+    s3_filename     = artifact[:s3_filename]
+    owner           = artifact[:owner] ? artifact[:owner] : "root"
+    unzip           = artifact[:unzip] ? artifact[:unzip] : false
+    classifier      = artifact[:classifier] ? artifact[:classifier] : ""
+    subfolder       = artifact[:subfolder] ? artifact[:subfolder] : ""
+    destination     = artifact[:destination]
+    timeout         = artifact[:timeout] ? artifact[:timeout] : global_timeout
+    destinationName = artifact[:destinationName] ? artifact[:destinationName] : artifactName
+    enabled         = artifact[:enabled] ? artifact[:enabled] : false
+    properties      = artifact[:properties] ? artifact[:properties] : []
+    terms           = artifact[:terms] ? artifact[:terms] : []
+    filtering_mode  = artifact[:filtering_mode] ? artifact[:filtering_mode] : "replace"
+    fileNameWithExt = "#{destinationName}.#{artifactType}"
+    destinationPath = "#{destination}/#{destinationName}"
+
+    if enabled == true
+      log "Processing artifact #{destinationName}.#{artifactType}; unzip: #{unzip}"
+      if path
+        fileNameWithExt = File.basename(path)
+        execute "cache-artifact-#{destinationName}" do
+          command       "cp -Rf #{path} #{chef_cache}/#{fileNameWithExt}"
         end
-        if timeout != ''
-          timeout     timeout
+      elsif url
+        fileNameWithExt = File.basename(url)
+        remote_file     "#{chef_cache}/#{fileNameWithExt}" do
+          source        url
         end
-        action        :put
-        dest          chef_cache
+      elsif artifact_id and group_id and version
+        maven artifactName do
+          artifact_id   artifact_id
+          group_id      group_id
+          version       version
+          if classifier != ''
+            classifier  classifier
+          end
+          if timeout != ''
+            timeout     timeout
+          end
+          action        :put
+          dest          chef_cache
+          owner         owner
+          packaging     artifactType
+          repositories  maven_repos_str
+        end
+      elsif s3_bucket and s3_filename
+        execute "s3-cp-#{s3_filename}" do
+          command "aws s3 cp s3://#{s3_bucket}/#{s3_filename} #{chef_cache}/#{fileNameWithExt}"
+        end
+      elsif s3_bucket
+        execute "sync-s3://#{s3_bucket}" do
+          command "aws s3 sync s3://#{s3_bucket} #{chef_cache}/#{destinationName}"
+          returns [0,2]
+        end
+        execute "copying-folder-#{destinationName}" do
+          command     "cp -Rf #{chef_cache}/#{destinationName} #{destination}/#{destinationName}; chown -R #{owner} #{destination}/#{destinationName}"
+          user        owner
+          only_if     "test -d #{chef_cache}/#{destinationName}"
+        end
+      end
+
+      directory "fix-permissions-#{destination}" do
+        path          destination
         owner         owner
-        packaging     artifactType
-        repositories  maven_repos_str
+        action        :create
+        recursive     true
       end
-    elsif s3_bucket and s3_filename
-      execute "s3-cp-#{s3_filename}" do
-        command "aws s3 cp s3://#{s3_bucket}/#{s3_filename} #{chef_cache}/#{fileNameWithExt}"
-      end
-    elsif s3_bucket
-      execute "sync-s3://#{s3_bucket}" do
-        command "aws s3 sync s3://#{s3_bucket} #{chef_cache}/#{destinationName}"
-        returns [0,2]
-      end
-      execute "copying-folder-#{destinationName}" do
-        command     "cp -Rf #{chef_cache}/#{destinationName} #{destination}/#{destinationName}; chown -R #{owner} #{destination}/#{destinationName}"
-        user        owner
-        only_if     "test -d #{chef_cache}/#{destinationName}"
-      end
-    end
 
-    directory "fix-permissions-#{destination}" do
-      path          destination
-      owner         owner
-      action        :create
-      recursive     true
-    end
-
-    if unzip == true
-      execute "unzipping-package-#{destinationName}" do
-        command     "unzip -q -u -o  #{chef_cache}/#{fileNameWithExt} #{subfolder} -d #{destinationPath}; chown -R #{owner} #{destinationPath}; chmod -R 755 #{destinationPath}"
-        user        owner
-        only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
-      end
-    else
-      execute "copying-package-#{fileNameWithExt}" do
-        command     "cp -Rf #{chef_cache}/#{fileNameWithExt} #{destination}/#{fileNameWithExt}; chown -R #{owner} #{destination}/#{fileNameWithExt}"
-        user        owner
-        only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
-      end
-    end
-
-    properties.each do |fileToPatch, propertyMap|
-      filtering_mode  = propertyMap[:filtering_mode] ? propertyMap[:filtering_mode] : filtering_mode
-      if filtering_mode == "replace"
-        propertyMap.each do |propName, propValue|
-          file_replace_line "#{destinationPath}/#{fileToPatch}" do
-            replace   "#{propName}="
-            with      "#{propName}=#{propValue}"
-            only_if   "test -f #{destinationPath}/#{fileToPatch}"
-          end
+      if unzip == true
+        execute "unzipping-package-#{destinationName}" do
+          command     "unzip -q -u -o  #{chef_cache}/#{fileNameWithExt} #{subfolder} -d #{destinationPath}; chown -R #{owner} #{destinationPath}; chmod -R 755 #{destinationPath}"
+          user        owner
+          only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
         end
-      elsif filtering_mode == "append"
-        propertyMap.each do |propName, propValue|
-          file_append "#{destinationPath}/#{fileToPatch}" do
-            line      "#{propName}=#{propValue}"
-            only_if   "test -f #{destinationPath}/#{fileToPatch}"
+      else
+        execute "copying-package-#{fileNameWithExt}" do
+          command     "cp -Rf #{chef_cache}/#{fileNameWithExt} #{destination}/#{fileNameWithExt}; chown -R #{owner} #{destination}/#{fileNameWithExt}"
+          user        owner
+          only_if     "test -f #{chef_cache}/#{fileNameWithExt}"
+        end
+      end
+
+      properties.each do |fileToPatch, propertyMap|
+        filtering_mode  = propertyMap[:filtering_mode] ? propertyMap[:filtering_mode] : filtering_mode
+        if filtering_mode == "replace"
+          propertyMap.each do |propName, propValue|
+            file_replace_line "#{destinationPath}/#{fileToPatch}" do
+              replace   "#{propName}="
+              with      "#{propName}=#{propValue}"
+              only_if   "test -f #{destinationPath}/#{fileToPatch}"
+            end
+          end
+        elsif filtering_mode == "append"
+          propertyMap.each do |propName, propValue|
+            file_append "#{destinationPath}/#{fileToPatch}" do
+              line      "#{propName}=#{propValue}"
+              only_if   "test -f #{destinationPath}/#{fileToPatch}"
+            end
           end
         end
       end
-    end
 
-    terms.each do |fileToPatch, termMap|
-      termMap.each do |termMatch, termReplacement|
-        file_replace  "#{destination}/#{artifactName}/#{fileToPatch}" do
-          replace     "#{term_delimiter_start}#{termMatch}#{term_delimiter_end}"
-          with        termReplacement
-          only_if     "test -f #{destination}/#{artifactName}/#{fileToPatch}"
+      terms.each do |fileToPatch, termMap|
+        termMap.each do |termMatch, termReplacement|
+          file_replace  "#{destination}/#{artifactName}/#{fileToPatch}" do
+            replace     "#{term_delimiter_start}#{termMatch}#{term_delimiter_end}"
+            with        termReplacement
+            only_if     "test -f #{destination}/#{artifactName}/#{fileToPatch}"
+          end
         end
       end
     end
