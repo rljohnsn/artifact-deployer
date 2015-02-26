@@ -1,5 +1,9 @@
 ## Change Log
 
+### upcoming (2015/02/26 03:13 +00:00)
+- [7405479](https://github.com/maoo/artifact-deployer/commit/7405479dba60045f7a64754ad73c3b20ed9a96f9) make databags and artifacts attribute optional, avoiding failures (@maoo)
+- [31c1301](https://github.com/maoo/artifact-deployer/commit/31c13017613b35c05f7445468061708956fcb96d) added changelog, fixed version of file to 1.0.0 (@maoo)
+
 ### v0.8.5 (2015/02/23 16:41 +00:00)
 - [44f073f](https://github.com/maoo/artifact-deployer/commit/44f073f0883677de74eaa1caef5fd2694fc8e3d6) bump version to 0.8.5 (@maoo)
 - [23e47ad](https://github.com/maoo/artifact-deployer/commit/23e47ad6093e347211f1a6912673473146051490) more docs (@maoo)
