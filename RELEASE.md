@@ -16,3 +16,18 @@ stove
 ```
 
 Versions are manually handled (bumped) in metadata.rb; if you try to release an existing version, you will get an error from github when trying to create the tag (tag already exist)
+
+### Creating/Updating changelog
+
+To install github-changes:
+```
+brew install npm
+npm install -g github-changes
+```
+
+To create/update changelog.md:
+```
+github-changes -o maoo -r artifact-deployer > changelog.md
+```
+#TODO - Add it to Rakefile
+More info on https://github.com/lalitkapoor/github-changes
