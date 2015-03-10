@@ -1,7 +1,7 @@
 Artifact Deployer
 ---
 
-[![Build Status](https://travis-ci.org/maoo/artifact-deployer.svg)](https://travis-ci.org/maoo/artifact-deployer)
+[![Build Status](https://travis-ci.org/maoo/artifact-deployer.svg)](https://travis-ci.org/maoo/artifact-deployer) [![Gitter chat](https://badges.gitter.im/maoo/artifact-deployer.png)](https://gitter.im/maoo/artifact-deployer)
 
 A Chef Cookbook that provides a simple way to download, unpack and patch artifacts.
 Download is offered via
