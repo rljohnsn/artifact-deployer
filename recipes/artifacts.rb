@@ -54,12 +54,14 @@ unless node['artifacts'] == nil
     if enabled == true
       log "Processing artifact #{destinationName}.#{artifactType}; unzip: #{unzip}"
       if path
-        fileNameWithExt = File.basename(path)
+        #TODO - test it
+        # fileNameWithExt = File.basename(path)
         execute "cache-artifact-#{destinationName}" do
           command       "cp -Rf #{path} #{chef_cache}/#{fileNameWithExt}"
         end
       elsif url
-        fileNameWithExt = File.basename(url)
+        #TODO - test it
+        #fileNameWithExt = File.basename(url)
         remote_file     "#{chef_cache}/#{fileNameWithExt}" do
           source        url
         end
