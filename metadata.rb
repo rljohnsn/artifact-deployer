@@ -11,8 +11,8 @@ supports          "centos-6.6"
 supports          "centos-7"
 
 # Resolved by Berkshelf, not present in Supermarket or forked
-depends "maven"
-depends "file"
+depends "maven", '~> 1.2.0'
+depends "file", '~> 1.0.0'
 
 # Community cookbooks
 depends "python", "~> 1.4.6"
