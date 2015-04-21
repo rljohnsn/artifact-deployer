@@ -123,7 +123,8 @@ unless node['artifacts'] == nil
         filtering_mode  = propertyMap[:filtering_mode] ? propertyMap[:filtering_mode] : filtering_mode
         if filtering_mode == "replace"
           propertyMap.each do |propName, propValue|
-            file_replace_line "#{destinationPath}/#{fileToPatch}" do
+            file_replace_line "replace-#{propName}-on-#{fileToPatch}" do
+              path      "#{destinationPath}/#{fileToPatch}"
               replace   "#{propName}="
               with      "#{propName}=#{propValue}"
               only_if   "test -f #{destinationPath}/#{fileToPatch}"
@@ -131,7 +132,8 @@ unless node['artifacts'] == nil
           end
         elsif filtering_mode == "append"
           propertyMap.each do |propName, propValue|
-            file_append "#{destinationPath}/#{fileToPatch}" do
+            file_append "append-#{propName}-to-#{fileToPatch}" do
+              path      "#{destinationPath}/#{fileToPatch}"
               line      "#{propName}=#{propValue}"
               only_if   "test -f #{destinationPath}/#{fileToPatch}"
             end
@@ -141,7 +143,8 @@ unless node['artifacts'] == nil
 
       terms.each do |fileToPatch, termMap|
         termMap.each do |termMatch, termReplacement|
-          file_replace  "#{destination}/#{artifactName}/#{fileToPatch}" do
+          file_replace  "replace-#{termMatch}-in-#{fileToPatch}" do
+            path        "#{destination}/#{artifactName}/#{fileToPatch}"
             replace     "#{term_delimiter_start}#{termMatch}#{term_delimiter_end}"
             with        termReplacement
             only_if     "test -f #{destination}/#{artifactName}/#{fileToPatch}"
