@@ -4,3 +4,7 @@ tmp
 .kitchen.local.yml
 *.lock
 berks-cookbooks/
+.git
+.gitignore
+Rakefile
+test
