@@ -15,9 +15,8 @@ begin
     end
   end
   if attribute_repos
-      attribute_repos.each do |repo_id,repo|
-        maven_repos_str.push "#{repo_id}::::#{repo['url']}"
-      end
+    attribute_repos.each do |repo_id,repo|
+      maven_repos_str.push "#{repo_id}::::#{repo['url']}"
     end
   end
 rescue
