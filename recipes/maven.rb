@@ -5,15 +5,24 @@ if node['artifact-deployer']['install_maven']
   m2_home         = node['maven']['m2_home']
   master_password = node['artifact-deployer']['maven']['master_password']
   repos_databag   = node['artifact-deployer']['maven']['repos_databag']
-
+  attribute_repos = node['artifact-deployer']['maven']['repositories']
+  
   begin
-    repos = data_bag(repos_databag)
-
+    databag_repos = data_bag(repos_databag)
+    
     maven_repos = []
 
-    repos.each do |repo|
-      repo_item = data_bag_item(repos_databag,repo)
-      maven_repos.push repo_item
+    if attribute_repos
+      attribute_repos.each do |repo_id,repo|
+        repo['id'] = repo_id
+        maven_repos.push repo
+      end
+    end
+    if databag_repos
+      databag_repos.each do |repo|
+        repo_item = data_bag_item(repos_databag,repo)
+        maven_repos.push repo_item
+      end
     end
   rescue
     Chef::Log.warn("Cannot find databag "+repos_databag+"; skipping Maven installation")
