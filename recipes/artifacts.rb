@@ -6,17 +6,19 @@ repos_databag = node['artifact-deployer']['maven']['repos_databag']
 attribute_repos = node['artifact-deployer']['maven']['repositories']
 
 maven_repos_str = []
+
+if attribute_repos
+  attribute_repos.each do |repo_id,repo|
+    maven_repos_str.push "#{repo_id}::::#{repo['url']}"
+  end
+end
+
 begin
   repos = data_bag(repos_databag)
   if repos
     repos.each do |repo|
       repo = data_bag_item('maven_repos',repo)
       maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
-    end
-  end
-  if attribute_repos
-    attribute_repos.each do |repo_id,repo|
-      maven_repos_str.push "#{repo_id}::::#{repo['url']}"
     end
   end
 rescue
