@@ -7,6 +7,7 @@
     | Authentication profiles can be used whenever maven must make a connection to a remote server.
     |-->
 
+   <% if @repos -%>
     <servers>
         <% @repos.each do |repo| %>
             <server>
@@ -16,4 +17,5 @@
             </server>
         <% end %>
     </servers>
+   <% end -%>
 </settings>

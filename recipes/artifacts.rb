@@ -3,13 +3,23 @@ term_delimiter_end = node['artifact-deployer']['term_delimiter_end']
 property_equals_sign = node['artifact-deployer']['property_equals_sign']
 global_timeout = node['artifact-deployer']['maven']['timeout']
 repos_databag = node['artifact-deployer']['maven']['repos_databag']
+attribute_repos = node['artifact-deployer']['maven']['repositories']
 
 maven_repos_str = []
+
+if attribute_repos
+  attribute_repos.each do |repo_id,repo|
+    maven_repos_str.push "#{repo_id}::::#{repo['url']}"
+  end
+end
+
 begin
   repos = data_bag(repos_databag)
-  repos.each do |repo|
-    repo = data_bag_item('maven_repos',repo)
-    maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
+  if repos
+    repos.each do |repo|
+      repo = data_bag_item('maven_repos',repo)
+      maven_repos_str.push "#{repo['id']}::::#{repo['url']}"
+    end
   end
 rescue
   Chef::Log.warn("Cannot find databag "+repos_databag+"; skipping repo option in Maven commands")
