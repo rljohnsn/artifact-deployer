@@ -6,18 +6,19 @@ if node['artifact-deployer']['install_maven']
   master_password = node['artifact-deployer']['maven']['master_password']
   repos_databag   = node['artifact-deployer']['maven']['repos_databag']
   attribute_repos = node['artifact-deployer']['maven']['repositories']
-  
+
+  maven_repos = []
+
+  if attribute_repos
+    attribute_repos.each do |repo_id,repo|
+      repo = {}
+      repo['id'] = repo_id
+      maven_repos.push repo
+    end
+  end
   begin
     databag_repos = data_bag(repos_databag)
-    
-    maven_repos = []
 
-    if attribute_repos
-      attribute_repos.each do |repo_id,repo|
-        repo['id'] = repo_id
-        maven_repos.push repo
-      end
-    end
     if databag_repos
       databag_repos.each do |repo|
         repo_item = data_bag_item(repos_databag,repo)
